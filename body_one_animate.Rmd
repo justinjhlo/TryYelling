@@ -2,7 +2,7 @@
 title: "-body/-one variation"
 author: "Justin Lo"
 date: "13 July 2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -38,7 +38,7 @@ The idea is to show how the distribution of *-body* vs *-one* varies in througho
 ```{r animate, message = FALSE}
 library(gganimate)
 
-ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
+body_one <- ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
   geom_bar(aes(fill = compound), stat = "identity") +
   # The following is what allows animation
   transition_states(
@@ -47,15 +47,19 @@ ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
     state_length = 3
   ) +
   labs(title = "Year: {closest_state}")
+
+animate(body_one, nframes = 150)
 ```
 
 Alternatively:
 
 ```{r animate-alt}
-ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
+body_one_alt <- ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
   geom_bar(aes(fill = compound), stat = "identity") +
   # The following is what allows animation
   transition_time(year) +
   ease_aes("sine-in-out") +
   labs(title = "Year: {frame_time}")
+
+animate(body_one_alt, nframes = 150)
 ```

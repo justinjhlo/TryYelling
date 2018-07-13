@@ -37,7 +37,7 @@ The idea is to show how the distribution of *-body* vs *-one* varies in througho
 ``` r
 library(gganimate)
 
-ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
+body_one <- ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
   geom_bar(aes(fill = compound), stat = "identity") +
   # The following is what allows animation
   transition_states(
@@ -46,6 +46,8 @@ ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
     state_length = 3
   ) +
   labs(title = "Year: {closest_state}")
+
+animate(body_one, nframes = 150)
 ```
 
 ![](body_one_animate_files/figure-markdown_github/animate-1.gif)
@@ -53,12 +55,14 @@ ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
 Alternatively:
 
 ``` r
-ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
+body_one_alt <- ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
   geom_bar(aes(fill = compound), stat = "identity") +
   # The following is what allows animation
   transition_time(year) +
   ease_aes("sine-in-out") +
   labs(title = "Year: {frame_time}")
+
+animate(body_one_alt, nframes = 150)
 ```
 
 ![](body_one_animate_files/figure-markdown_github/animate-alt-1.gif)
