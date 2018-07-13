@@ -1,0 +1,61 @@
+---
+title: "-body/-one variation"
+author: "Justin Lo"
+date: "13 July 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data
+
+These data were lifted from the D'Arcy et al (2013) paper: Assymetrical trajectories: The past and present of *-body/-one*. Data from 1570 onwards were visually esimated from Figure 4. Percentages prior to that were based on binary presence/absence of the form in Figure 1.
+
+```{r}
+quantifiers <- read.csv("body_one_variation.csv", stringsAsFactors = TRUE)
+```
+
+## Basic graph
+
+This is a sample of the distribution of *-body* vs *-one* between 1750 and 1800. I chose a stacked bar chart because there is only one dimension (%) changing against time.
+
+```{r slice, message = FALSE}
+library(ggplot2)
+library(dplyr)
+
+var1750 <- quantifiers %>% filter(year == 1750)
+
+ggplot(var1750, aes(x = quantifier, y = percentage)) +
+  geom_bar(aes(fill = compound), stat = "identity")
+```
+
+## Animated graph
+
+The idea is to show how the distribution of *-body* vs *-one* varies in throughout the course of history. To do this, we use the package `gganimate`, which extends the functionality of `ggplot2` to allow animation. The size of each bar transitions to achieve the visual effect. Obviously, the Middle English data are a bit wild, due to lack of actual data (and no comparison with the *-man* form).
+
+```{r animate, message = FALSE}
+library(gganimate)
+
+ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
+  geom_bar(aes(fill = compound), stat = "identity") +
+  # The following is what allows animation
+  transition_states(
+    year,
+    transition_length = 2,
+    state_length = 3
+  ) +
+  labs(title = "Year: {closest_state}")
+```
+
+Alternatively:
+
+```{r animate-alt}
+ggplot(quantifiers, aes(x = quantifier, y = percentage)) +
+  geom_bar(aes(fill = compound), stat = "identity") +
+  # The following is what allows animation
+  transition_time(year) +
+  ease_aes("sine-in-out") +
+  labs(title = "Year: {frame_time}")
+```
